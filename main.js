@@ -1,40 +1,44 @@
 let opcion;
-let librosSeleccionados = "Ha seleccionado:";
-
-const precioLibro1 = 100;
-const precioLibro2 = 200;
-const precioLibro3 = 300;
-const precioLibro4 = 400;
+let librosSeleccionados = [];
 
 const recargoCuota3 = 10;
 const recargoCuota6 = 25;
 
 let subTotal = 0;
 
-console.log("1) Libro 1");
-console.log("2) Libro 2");
-console.log("3) Libro 3");
-console.log("4) Libro 4");
+const libros = [
+  { titulo: "Love At First Lie", precio: 3000, id: 1 },
+  { titulo: "Shut Up", precio: 2500, id: 2 },
+  { titulo: "Kings, Queens, and Fucked Up Things", precio: 4000, id: 3 },
+  { titulo: "Traitors, Queens, and Fucked Up Twins", precio: 4500, id: 4 },
+];
+
+for (let i = 0; i < libros.length; i++) {
+  console.log(
+    `${libros[i].id}) ${libros[i].titulo}, valor: $${libros[i].precio}`
+  );
+}
+
 console.log("Presione 0 para dejar de comprar");
 
 opcion = parseInt(prompt("Indique el número del libro que desea comprar:"));
 
 while (opcion != 0) {
   if (opcion >= 1 && opcion <= 4) {
-    librosSeleccionados = librosSeleccionados + " " + opcion.toString();
+    librosSeleccionados.push(opcion);
 
     switch (opcion) {
       case 1:
-        subTotal = subTotal + precioLibro1;
+        subTotal = subTotal + libros[0].precio;
         break;
       case 2:
-        subTotal = subTotal + precioLibro2;
+        subTotal = subTotal + libros[1].precio;
         break;
       case 3:
-        subTotal = subTotal + precioLibro3;
+        subTotal = subTotal + libros[2].precio;
         break;
       case 4:
-        subTotal = subTotal + precioLibro4;
+        subTotal = subTotal + libros[3].precio;
         break;
     }
   }
@@ -46,7 +50,9 @@ while (opcion != 0) {
   );
 }
 
-console.log(`${librosSeleccionados}, el total es: $${subTotal} `);
+console.log(
+  `Ha seleccionado: ${librosSeleccionados}, el total es: $${subTotal} `
+);
 
 let cuotas;
 
