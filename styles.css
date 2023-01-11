@@ -1,0 +1,44 @@
+.libro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 20px 0;
+  text-align: center;
+  border: 3px solid orange;
+  margin-bottom: 1rem;
+  width: 300px;
+  background-color: #fff5e4;
+}
+
+.libro h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.libro p {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.boton {
+  background-color: orange;
+  padding: 10px 20px;
+  text-align: center;
+  border-radius: 10px;
+  border: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .contenedor-articulos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 200px;
+    gap: 2rem;
+  }
+}
