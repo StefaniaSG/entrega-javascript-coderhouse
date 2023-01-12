@@ -1,10 +1,14 @@
+section {
+  margin-top: 50px;
+}
+
 .libro {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  padding: 20px 0;
+  padding: 20px 10px;
   text-align: center;
   border: 3px solid orange;
   margin-bottom: 1rem;
@@ -38,7 +42,86 @@
   .contenedor-articulos {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    padding: 0 200px;
+    padding: 0 400px;
     gap: 2rem;
   }
+}
+
+.carrito {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  gap: 1.5rem;
+  border: 3px solid orange;
+  background-color: #fff5e4;
+  width: 600px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+.carrito li {
+  list-style: none;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 5fr repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 2rem;
+  background-color: white;
+  border: 2px solid orange;
+  text-align: center;
+}
+
+.boton-borrar {
+  background-color: orange;
+  border-radius: 10px;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.boton:hover {
+  background-color: #ffd3a0;
+  transition: all 0.3s ease-in-out;
+}
+
+.boton-borrar:hover {
+  background-color: orangered;
+  transition: all 0.3s ease-in-out;
+}
+
+.titulo {
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 30px;
+}
+
+.contenedor2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  width: 600px;
+  margin: 0 auto;
+  margin-bottom: 100px;
+}
+
+.contenedor3 {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.select-cuotas {
+  background-color: #ffd3a0;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 30px;
 }

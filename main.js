@@ -2,61 +2,110 @@ let opcion;
 let librosSeleccionados = [];
 
 const recargoCuota3 = 10;
-const recargoCuota6 = 25;
-
-let subTotal = 0;
+const recargoCuota6 = 15;
 
 const libros = [
-  { titulo: "Love At First Lie", precio: 3000, id: 1 },
-  { titulo: "Shut Up", precio: 2500, id: 2 },
-  { titulo: "Kings, Queens, and Fucked Up Things", precio: 4000, id: 3 },
-  { titulo: "Traitors, Queens, and Fucked Up Twins", precio: 4500, id: 4 },
+  { titulo: "Love At First Lie", precio: 3000, cantidad: 0, id: 1 },
+  { titulo: "Shut Up", precio: 2500, cantidad: 0, id: 2 },
+  {
+    titulo: "Kings, Queens, and Fucked Up Things",
+    precio: 4000,
+    cantidad: 0,
+    id: 3,
+  },
+  {
+    titulo: "Traitors, Queens, and Fucked Up Twins",
+    precio: 4500,
+    cantidad: 0,
+    id: 4,
+  },
 ];
 
 const root = document.querySelector("#root");
+
+const tituloProductos = document.createElement("h2");
+tituloProductos.innerText = "Productos";
+tituloProductos.classList.add("titulo");
+root.appendChild(tituloProductos);
 
 const contenedor = document.createElement("div");
 contenedor.classList.add("contenedor-articulos");
 root.appendChild(contenedor);
 
+const tituloCarrito = document.createElement("h2");
+tituloCarrito.classList.add("titulo");
+tituloCarrito.innerText = "Tu carrito";
+root.appendChild(tituloCarrito);
+
 const carrito = document.createElement("ul");
 carrito.classList.add("carrito");
 root.appendChild(carrito);
 
-function agregarAlCarro() {
-  carrito.textContent = "";
-  const carritoSinDuplicados = [...new Set(librosSeleccionados)];
-  carritoSinDuplicados.forEach((libro) => {
-    const numeroUnidadesItem = librosSeleccionados.reduce((total, itemId) => {
-      return itemId === libro ? (total += 1) : total;
-    }, 0);
+const contenedor2 = document.createElement("div");
+contenedor2.classList.add("contenedor2");
+root.appendChild(contenedor2);
 
+const contenedor3 = document.createElement("div");
+contenedor3.classList.add("contenedor3");
+contenedor2.appendChild(contenedor3);
+
+const cuotas = document.createElement("select");
+cuotas.classList.add("select-cuotas");
+cuotas.innerHTML = `
+                    <option>Seleccione cantidad de cuotas</option>
+                    <option value="1">1 cuota (sin recargo)</option>
+                    <option value="2">3 cuotas (10% de recargo)</option>
+                    <option value="3">6 cuotas (15% de recargo)</option>
+`;
+cuotas.addEventListener("change", calcularTotal);
+contenedor3.appendChild(cuotas);
+console.log(cuotas);
+
+const precioTotal = document.createElement("h3");
+precioTotal.classList.add("total");
+precioTotal.innerText = "Total: $0";
+contenedor3.appendChild(precioTotal);
+
+const comprar = document.createElement("button");
+comprar.classList.add("boton");
+comprar.innerText = "Comprar";
+contenedor3.appendChild(comprar);
+
+function agregarAlCarro() {
+  let idBoton = 0;
+  carrito.textContent = "";
+  librosSeleccionados.forEach((libro) => {
     let li = document.createElement("li");
     li.innerHTML = `
                     <h3>${libro.titulo}</h3>
-                    <span>$${libro.precio * numeroUnidadesItem}</span>
-                    <span>${numeroUnidadesItem}</span>
+                    <span>$${libro.precio * libro.cantidad}</span>
+                    <span>${libro.cantidad}</span>
     `;
     let boton = document.createElement("button");
     boton.classList.add("boton-borrar");
     boton.innerText = "X";
+    boton.id = idBoton;
+    idBoton += 1;
     boton.dataset.item = libro;
     boton.addEventListener("click", borrarItemCarro);
     li.appendChild(boton);
 
     carrito.appendChild(li);
   });
+  calcularTotal();
 }
 
 function borrarItemCarro(evento) {
-  const botonClickeado = evento.target;
-  console.log(botonClickeado);
+  let indice = evento.currentTarget.id;
 
-  librosSeleccionados.filter((carritoId) => {
-    return carritoId !== botonClickeado;
-  });
+  if (librosSeleccionados[indice].cantidad == 1) {
+    librosSeleccionados.splice(indice, 1);
+  } else {
+    librosSeleccionados[indice].cantidad -= 1;
+  }
 
   agregarAlCarro();
+  calcularTotal();
 }
 
 libros.forEach((libro) => {
@@ -71,111 +120,50 @@ libros.forEach((libro) => {
   boton.classList.add("boton");
   boton.innerText = "Agregar al carrito";
   boton.addEventListener("click", function () {
-    librosSeleccionados.push(libro);
+    // Busco si ya existe el libro
+    let indiceLibro = librosSeleccionados.indexOf(libro);
+    if (indiceLibro == -1) {
+      libro.cantidad = 1;
+      librosSeleccionados.push(libro);
+    } else {
+      librosSeleccionados[indiceLibro].cantidad += 1;
+    }
     agregarAlCarro();
+    calcularTotal();
     console.log(librosSeleccionados);
   });
   article.appendChild(boton);
   contenedor.appendChild(article);
 });
 
-// for (let i = 0; i < libros.length; i++) {
-//   console.log(
-//     `${libros[i].id}) ${libros[i].titulo}, valor: $${libros[i].precio}`
-//   );
-// }
+function calcularTotal() {
+  let total = 0;
+  let totalCarrito = document.querySelector(".total");
+  librosSeleccionados.forEach((libro) => {
+    const precio = libro.precio;
+    total = total + precio * libro.cantidad;
+  });
 
-// console.log("Presione 0 para dejar de comprar");
+  const cuotaSeleccionada = document.getElementsByClassName("select-cuotas");
 
-// opcion = parseInt(prompt("Indique el número del libro que desea comprar:"));
+  if (cuotaSeleccionada[0].selectedIndex === 2) {
+    total = total * (recargoCuota3 / 100 + 1);
+  } else if (cuotaSeleccionada[0].selectedIndex === 3) {
+    total = total * (recargoCuota6 / 100 + 1);
+  }
 
-// while (opcion != 0) {
-//   if (opcion >= 1 && opcion <= 4) {
-//     librosSeleccionados.push(opcion);
+  totalCarrito.innerHTML = `Total: $${total.toFixed(2)}`;
+  agregarLS();
+}
 
-//     switch (opcion) {
-//       case 1:
-//         subTotal = subTotal + libros[0].precio;
-//         break;
-//       case 2:
-//         subTotal = subTotal + libros[1].precio;
-//         break;
-//       case 3:
-//         subTotal = subTotal + libros[2].precio;
-//         break;
-//       case 4:
-//         subTotal = subTotal + libros[3].precio;
-//         break;
-//     }
-//   }
+function agregarLS() {
+  localStorage.setItem("carrito", JSON.stringify(librosSeleccionados));
+}
 
-//   opcion = parseInt(
-//     prompt(
-//       "¿Desea agregar otro producto al carrito? Ingrese el número del libro que quiere añadir, o presione 0 para finalizar la compra."
-//     )
-//   );
-// }
-
-// console.log(
-//   `Ha seleccionado: ${librosSeleccionados}, el total es: $${subTotal} `
-// );
-
-// let cuotas;
-
-// while (cuotas != 1 && cuotas != 3 && cuotas != 6) {
-//   console.log("Presione 1 si desea comprar en 1 cuota, sin recargo.");
-//   console.log(
-//     `Presione 3 si desea comprar en 3 cuotas, con un recargo del ${recargoCuota3}%.`
-//   );
-//   console.log(
-//     `Presione 6 si desea comprar en 6 cuotas, con un recargo del ${recargoCuota6}%.`
-//   );
-
-//   cuotas = parseInt(prompt("Indique el número de cuotas que desea:"));
-
-//   switch (cuotas) {
-//     case 1:
-//       console.log("Ha seleccionado 1 cuota.");
-//       break;
-
-//     case 3:
-//       console.log("Ha seleccionado 3 cuotas.");
-//       break;
-
-//     case 6:
-//       console.log("Ha seleccionado 6 cuotas.");
-//       break;
-
-//     default:
-//       console.log("Por favor, seleccione un método de pago válido.");
-//       break;
-//   }
-// }
-
-// function calcularTotal(subTotal, cuotas) {
-//   if (cuotas === 1) {
-//     return subTotal;
-//   } else if (cuotas === 3) {
-//     return subTotal * (recargoCuota3 / 100 + 1);
-//   } else if (cuotas === 6) {
-//     return subTotal * (recargoCuota6 / 100 + 1);
-//   } else {
-//     console.log(
-//       "Cantidad de cuotas inválidas. Por favor, revise el método de pago seleccionado."
-//     );
-//   }
-// }
-
-// function calcularCuotas(precio, cuotas) {
-//   return precio / cuotas;
-// }
-
-// let total = calcularTotal(subTotal, cuotas);
-
-// let valorCuotas = calcularCuotas(total, cuotas);
-
-// console.log(
-//   `El total a pagar es: $${total.toFixed(
-//     2
-//   )}. El valor de cada cuota es: $${valorCuotas.toFixed(2)} `
-// );
+window.onload = () => {
+  const storage = JSON.parse(localStorage.getItem("carrito"));
+  if (storage) {
+    librosSeleccionados = storage;
+    agregarAlCarro();
+  }
+};
