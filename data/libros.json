@@ -1,0 +1,30 @@
+[
+  {
+    "imagen": "./assets/lafl-portada.jpg",
+    "titulo": "Love At First Lie",
+    "precio": 3000,
+    "cantidad": 0,
+    "id": 1
+  },
+  {
+    "imagen": "./assets/shut-up-portada.jpg",
+    "titulo": "Shut Up",
+    "precio": 2500,
+    "cantidad": 0,
+    "id": 2
+  },
+  {
+    "imagen": "./assets/kqft-portada.jpg",
+    "titulo": "Kings, Queens, and Fucked Up Things",
+    "precio": 4000,
+    "cantidad": 0,
+    "id": 3
+  },
+  {
+    "imagen": "./assets/tqft-portada.jpg",
+    "titulo": "Traitors, Queens, and Fucked Up Twins",
+    "precio": 4500,
+    "cantidad": 0,
+    "id": 4
+  }
+]

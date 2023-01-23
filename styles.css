@@ -10,10 +10,10 @@ section {
   margin: 0 auto;
   padding: 20px 10px;
   text-align: center;
-  border: 3px solid orange;
   margin-bottom: 1rem;
   width: 300px;
   background-color: #fff5e4;
+  border-radius: 1rem;
 }
 
 .libro h3 {
@@ -25,6 +25,13 @@ section {
 .libro p {
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.libro img {
+  height: 280px;
+  width: 180px;
+  margin-block: 1.5rem;
+  border-radius: 0.75rem;
 }
 
 .boton {
@@ -53,7 +60,7 @@ section {
   justify-content: center;
   align-content: center;
   gap: 1.5rem;
-  border: 3px solid orange;
+  border-radius: 1rem;
   background-color: #fff5e4;
   width: 600px;
   padding: 20px;
@@ -69,7 +76,7 @@ section {
   justify-items: center;
   gap: 2rem;
   background-color: white;
-  border: 2px solid orange;
+  border-radius: 1rem;
   text-align: center;
 }
 

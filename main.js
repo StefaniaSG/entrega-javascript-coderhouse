@@ -4,23 +4,6 @@ let librosSeleccionados = [];
 const recargoCuota3 = 10;
 const recargoCuota6 = 15;
 
-const libros = [
-  { titulo: "Love At First Lie", precio: 3000, cantidad: 0, id: 1 },
-  { titulo: "Shut Up", precio: 2500, cantidad: 0, id: 2 },
-  {
-    titulo: "Kings, Queens, and Fucked Up Things",
-    precio: 4000,
-    cantidad: 0,
-    id: 3,
-  },
-  {
-    titulo: "Traitors, Queens, and Fucked Up Twins",
-    precio: 4500,
-    cantidad: 0,
-    id: 4,
-  },
-];
-
 const root = document.querySelector("#root");
 
 const tituloProductos = document.createElement("h2");
@@ -59,7 +42,6 @@ cuotas.innerHTML = `
 `;
 cuotas.addEventListener("change", calcularTotal);
 contenedor3.appendChild(cuotas);
-console.log(cuotas);
 
 const precioTotal = document.createElement("h3");
 precioTotal.classList.add("total");
@@ -70,6 +52,7 @@ const comprar = document.createElement("button");
 comprar.classList.add("boton");
 comprar.innerText = "Comprar";
 contenedor3.appendChild(comprar);
+comprar.addEventListener("click", confirmacionDeCompra);
 
 function agregarAlCarro() {
   let idBoton = 0;
@@ -106,35 +89,38 @@ function borrarItemCarro(evento) {
 
   agregarAlCarro();
   calcularTotal();
+  eliminarProducto();
 }
 
-libros.forEach((libro) => {
-  let article = document.createElement("article");
-  article.classList.add("libro");
-  article.innerHTML = `
-  <h3>${libro.titulo}</h3>
-  <p>$${libro.precio}</p>
-  `;
+function renderLibros(libros) {
+  libros.forEach((libro) => {
+    let article = document.createElement("article");
+    article.classList.add("libro");
+    article.innerHTML = `
+    <img src=${libro.imagen} />
+    <h3>${libro.titulo}</h3>
+    <p>$${libro.precio}</p>
+    `;
 
-  let boton = document.createElement("button");
-  boton.classList.add("boton");
-  boton.innerText = "Agregar al carrito";
-  boton.addEventListener("click", function () {
-    // Busco si ya existe el libro
-    let indiceLibro = librosSeleccionados.indexOf(libro);
-    if (indiceLibro == -1) {
-      libro.cantidad = 1;
-      librosSeleccionados.push(libro);
-    } else {
-      librosSeleccionados[indiceLibro].cantidad += 1;
-    }
-    agregarAlCarro();
-    calcularTotal();
-    console.log(librosSeleccionados);
+    let boton = document.createElement("button");
+    boton.classList.add("boton");
+    boton.innerText = "Agregar al carrito";
+    boton.addEventListener("click", function () {
+      let indiceLibro = librosSeleccionados.indexOf(libro);
+      if (indiceLibro == -1) {
+        libro.cantidad = 1;
+        librosSeleccionados.push(libro);
+      } else {
+        librosSeleccionados[indiceLibro].cantidad += 1;
+      }
+      mostrarModificacion();
+      agregarAlCarro();
+      calcularTotal();
+    });
+    article.appendChild(boton);
+    contenedor.appendChild(article);
   });
-  article.appendChild(boton);
-  contenedor.appendChild(article);
-});
+}
 
 function calcularTotal() {
   let total = 0;
@@ -167,3 +153,69 @@ window.onload = () => {
     agregarAlCarro();
   }
 };
+
+function mostrarModificacion() {
+  Toastify({
+    text: "Has modificado tu carrito!",
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top",
+    position: "right",
+    stopOnFocus: true,
+    style: {
+      background:
+        "linear-gradient(to right top, #ffed00, #ffcf00, #fdb200, #f69500, #eb7912)",
+      color: "black",
+      fontWeight: "bold",
+    },
+  }).showToast();
+}
+
+function eliminarProducto() {
+  Toastify({
+    text: "Has eliminado un producto de tu carrito!",
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top",
+    position: "right",
+    stopOnFocus: true,
+    style: {
+      background:
+        "linear-gradient(to right top, #ffed00, #ffcf00, #fdb200, #f69500, #eb7912)",
+      color: "black",
+      fontWeight: "bold",
+    },
+  }).showToast();
+}
+
+function confirmacionDeCompra() {
+  Swal.fire({
+    title: "¿Está seguro que desea realizar la compra?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "orange",
+    cancelButtonColor: "grey",
+    confirmButtonText: "Sí",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      librosSeleccionados = [];
+      Swal.fire(
+        "Compra realizada",
+        "¡La compra ha sido realizada con éxito!",
+        "success"
+      );
+      agregarAlCarro();
+    }
+  });
+}
+
+async function fetchAPI() {
+  const response = await fetch("./data/libros.json");
+  const datos = await response.json();
+
+  renderLibros(datos);
+}
+
+fetchAPI();
